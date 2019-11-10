@@ -1,7 +1,7 @@
 <template>
-  <div id="app" class="text-white antialiased">
+  <v-app class="text-white antialiased">
     <router-view />
-  </div>
+  </v-app>
 </template>
 <style>
 body {
@@ -14,9 +14,8 @@ body {
   flex-direction: column;
   flex-grow: 1;
   font-family: "Rubik", sans-serif;
-  background: linear-gradient(to bottom right, #34a7ff 55%, #45cafd);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background: linear-gradient(to bottom right, #34a7ff 55%, #45cafd) no-repeat
+    fixed;
 }
 button {
   outline: none !important;
@@ -25,3 +24,13 @@ button {
   outline: none !important;
 }
 </style>
+
+<script>
+export default {
+  name: "App",
+
+  data: () => ({
+    //
+  })
+};
+</script>

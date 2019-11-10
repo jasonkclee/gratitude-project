@@ -9,7 +9,7 @@ import "@/assets/css/tailwind.css";
 import gtag from "./plugins/gtag";
 import api from "./plugins/api";
 import TableComponent from "vue-table-component";
-import vuetify from "./plugins/vuetify";
+import vuetify from './plugins/vuetify';
 
 const jwt = require("jsonwebtoken");
 

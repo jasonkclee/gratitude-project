@@ -6,39 +6,40 @@
   <div>
     <nav-bar />
     <div class="container w-5/6 mx-auto">
-      <v-card class="tableCard">
-        <v-card-title class="tableTitle">
+      <v-card class="light-blue lighten-4">
+        <v-card-title class="font-weight-bold">
           Gratitude Messages
           <v-spacer></v-spacer>
           <v-text-field
-            class="tableSearch"
             v-model="search"
+            :light="true"
             label="Search"
             single-line
             hide-details
-          ></v-text-field>
+          >
+          </v-text-field>
         </v-card-title>
-        <v-card class="tableData">
-        <v-data-table
-          :items="messages"
-          :headers="headers"
-          :loading="true"
-          :fixed-header="true"
-          :search="search"
-          :footer-props="{
-            itemsPerPageAllText: '',
-            itemsPerPageOptions: [10]
-          }"
-        >
-          <template class="tableData" slot="”items”" slot-scope="props">
-            <td>{{ props.item.recipientName }}</td>
-            <td>{{ props.item.beneficiaryName }}</td>
-            <td>{{ props.item.timestamp }}</td>
-            <td>{{ props.item.link }}</td>
-          </template>
-        </v-data-table>
+        <v-card>
+          <v-data-table
+            class="light-blue lighten-4 elevation-1"
+            :items="messages"
+            :headers="headers"
+            :loading="loading"
+            :search="search"
+            :light="true"
+            :footer-props="{
+              itemsPerPageAllText: '',
+              itemsPerPageOptions: [10]
+            }"
+          >
+            <template slot="”items”" slot-scope="props">
+              <td>{{ props.item.recipientName }}</td>
+              <td>{{ props.item.beneficiaryName }}</td>
+              <td>{{ props.item.timestamp }}</td>
+              <td>{{ props.item.link }}</td>
+            </template>
+          </v-data-table>
         </v-card>
-
       </v-card>
     </div>
   </div>
@@ -54,6 +55,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       search: "",
       headers: [
         { text: "Recipient", value: "recipientName", align: "left" },
@@ -116,6 +118,9 @@ export default {
             link: "Link"
           }
         ];
+      })
+      .finally(() => {
+        this.loading = false;
       });
 
     // temporarily use hardcoded messages

@@ -4,8 +4,6 @@ import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
 
-import "@/assets/css/tailwind.css";
-
 import gtag from "./plugins/gtag";
 import api from "./plugins/api";
 import TableComponent from "vue-table-component";

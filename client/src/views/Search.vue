@@ -19,6 +19,7 @@
             :items="messages"
             :headers="headers"
             :loading="loading"
+            git
             :search="search"
             :footer-props="{
               itemsPerPageAllText: '',

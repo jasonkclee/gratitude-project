@@ -7,7 +7,7 @@ import "./registerServiceWorker";
 import gtag from "./plugins/gtag";
 import api from "./plugins/api";
 import TableComponent from "vue-table-component";
-import vuetify from './plugins/vuetify';
+import vuetify from "./plugins/vuetify";
 
 const jwt = require("jsonwebtoken");
 
@@ -25,32 +25,32 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    var token = localStorage.getItem('token');
+    var token = localStorage.getItem("token");
     if (token != null) {
-      console.log(token)
+      console.log(token);
       try {
         const exp_check = jwt.decode(token.substring(7, token.length));
         if (Date.now() >= exp_check.exp * 1000) {
-          // token expired 
+          // token expired
           next({
-            path: '/login',
+            path: "/login",
             query: { redirect: to.fullPath }
-          })
+          });
         } else {
           // token is valid
-          next()
+          next();
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     } else {
       next({
-        path: '/login',
+        path: "/login",
         query: { redirect: to.fullPath }
-      })
+      });
     }
   } else {
-    next() // make sure to always call next()!
+    next(); // make sure to always call next()!
   }
 });
 

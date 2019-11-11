@@ -1,10 +1,7 @@
 <template>
   <div>
-    <nav-bar hideLoginItem/>
-    <div class="loginPage">
-      <h1 class="text-4xl">Login</h1>
-      <login-form />
-    </div>
+    <nav-bar hideLoginItem />
+    <login-form />
   </div>
 </template>
 

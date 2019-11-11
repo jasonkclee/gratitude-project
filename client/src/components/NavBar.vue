@@ -1,27 +1,21 @@
 <template>
-  <div
-    class="flex justify-between items-baseline block py-5 px-4 md:px-8 border-b-2 border-white mb-8"
-  >
-    <h1 class="italic font-bold text-2xl">gratitude project</h1>
-    <span>
-    <router-link v-if="about" :to="{ name: 'About' }" class="text-xl navItem">about</router-link>
-    <span v-if="!hideLoginItem">
-    <span class="navItem text-xl" v-if="token" v-on:click="logout" >Logout</span>
-    <router-link v-else :to="{ name: 'Login' }" class="navItem text-xl">Login</router-link>
-    </span>
-    </span>
-  </div>
-</template>
-<style>
-  .navItem{
-    margin-left:10px;
-    cursor:pointer;
-  }
-</style>
-<script>
+  <v-container class="mb-12">
+    <v-app-bar app>
+      <v-toolbar-title>gratitude project</v-toolbar-title>
 
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+      <v-toolbar-items>
+        <v-btn v-if="about" :to="{ name: 'About' }" class="mx-1">about</v-btn>
+        <v-btn v-if="token" @click="logout" class="mx-1">Logout</v-btn>
+
+        <v-btn v-else :to="{ name: 'Login' }" class="mx-1">Login</v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
+  </v-container>
+</template>
+
+<script>
+import Vue from "vue";
+import VueRouter from "vue-router";
 Vue.use(VueRouter);
 export default {
   name: "NavBar",
@@ -37,16 +31,16 @@ export default {
       default: false
     }
   },
-  data(){
+  data() {
     return {
       token: localStorage.getItem("token")
-    }
+    };
   },
-  methods:{
-    logout(){
+  methods: {
+    logout() {
       localStorage.removeItem("token");
       console.log("Deleted token from local storage");
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
   }
 };

@@ -28,7 +28,7 @@
           <a
             href="mailto:ben@gratitudeproject.ca"
             target="_top"
-            class="font-bold underline"
+            class="font-bold underline white--text"
           >
             ben@gratitudeproject.ca
           </a>

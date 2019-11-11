@@ -6,13 +6,12 @@
   <div>
     <nav-bar />
     <div class="container w-5/6 mx-auto">
-      <v-card class="light-blue lighten-4">
-        <v-card-title class="font-weight-bold">
+      <v-card :dark="true">
+        <v-card-title>
           Gratitude Messages
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
-            :light="true"
             label="Search"
             single-line
             hide-details
@@ -21,12 +20,10 @@
         </v-card-title>
         <v-card>
           <v-data-table
-            class="light-blue lighten-4 elevation-1"
             :items="messages"
             :headers="headers"
             :loading="loading"
             :search="search"
-            :light="true"
             :footer-props="{
               itemsPerPageAllText: '',
               itemsPerPageOptions: [10]

@@ -1,7 +1,3 @@
-<style>
-@import "../assets/css/myTable.css";
-</style>
-
 <template>
   <div>
     <nav-bar />

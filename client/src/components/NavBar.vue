@@ -1,13 +1,17 @@
 <template>
   <v-container class="mb-12">
     <v-app-bar app>
-      <v-toolbar-title>gratitude project</v-toolbar-title>
-
+      <v-toolbar-title :style="{ cursor: 'pointer' }">
+        <router-link :to="{ name: 'Home' }" tag="v-toolbar-title"
+          >gratitude project</router-link
+        >
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn v-if="about" :to="{ name: 'About' }" class="mx-1">about</v-btn>
-        <v-btn v-if="token" @click="logout" class="mx-1">Logout</v-btn>
+        <v-btn v-if="about" :to="{ name: 'About' }">about</v-btn>
+        <v-btn v-if="token" @click="logout">Logout</v-btn>
 
-        <v-btn v-else :to="{ name: 'Login' }" class="mx-1">Login</v-btn>
+        <v-btn v-else :to="{ name: 'Login' }">Login</v-btn>
       </v-toolbar-items>
     </v-app-bar>
   </v-container>
@@ -41,6 +45,9 @@ export default {
       localStorage.removeItem("token");
       console.log("Deleted token from local storage");
       this.$router.push("/login");
+    },
+    home() {
+      this.$router.push("/");
     }
   }
 };

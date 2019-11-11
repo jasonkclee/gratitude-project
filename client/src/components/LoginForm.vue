@@ -28,8 +28,9 @@
         <v-btn class="mx-auto my-2" color="info" @click="login()">Login</v-btn>
       </v-card-actions>
     </v-card>
-    <v-spacer></v-spacer>
-    <v-alert class="mt-5" type="error" v-if="errorMsg">{{ errorMsg }}</v-alert>
+    <v-alert width="400" class="mt-5 mx-auto" type="error" v-if="errorMsg">
+      {{ errorMsg }}</v-alert
+    >
   </v-container>
 </template>
 
@@ -97,7 +98,7 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          this.errorMsg = "*Error: ";
+          this.errorMsg = "Error: ";
           if (err.response.data.email) {
             this.errorMsg = this.errorMsg + err.response.data.email + "\n";
           }

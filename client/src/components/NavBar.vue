@@ -1,33 +1,37 @@
 <template>
   <v-container class="mb-12">
-    <v-app-bar app class="white--text" color="primary">
+    <v-app-bar flat app class="white--text" color="primary">
       <v-toolbar-title :style="{ cursor: 'pointer' }">
         <router-link :to="{ name: 'Home' }" tag="v-toolbar-title"
           >gratitude project</router-link
         >
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="py-2">
-        <v-btn
-          class="v-btn--rounded mx-2 primary lighten-2 text--white"
-          v-if="about"
-          :to="{ name: 'About' }"
-          >about</v-btn
-        >
-        <v-btn
-          class="v-btn--rounded mx-2 primary lighten-2 text--white"
-          v-if="token"
-          @click="logout"
-          >Logout</v-btn
-        >
+      <v-btn
+        class="mx-2 primary lighten-2 text--white"
+        rounded
+        depressed
+        v-if="about"
+        :to="{ name: 'About' }"
+        >about</v-btn
+      >
+      <v-btn
+        class="mx-2 primary lighten-2 text--white"
+        rounded
+        depressed
+        v-if="token"
+        @click="logout"
+        >Logout</v-btn
+      >
 
-        <v-btn
-          class="v-btn--rounded mx-2 primary lighten-2 text--white"
-          v-else
-          :to="{ name: 'Login' }"
-          >Login</v-btn
-        >
-      </v-toolbar-items>
+      <v-btn
+        class="mx-2 primary lighten-2 text--white"
+        rounded
+        depressed
+        v-else
+        :to="{ name: 'Login' }"
+        >Login</v-btn
+      >
     </v-app-bar>
   </v-container>
 </template>

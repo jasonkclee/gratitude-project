@@ -25,7 +25,9 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn class="mx-auto my-2" color="info" @click="login()">Login</v-btn>
+        <v-btn class="mx-auto my-2" rounded color="info" @click="login()"
+          >Login</v-btn
+        >
       </v-card-actions>
     </v-card>
     <v-alert width="400" class="mt-5 mx-auto" type="error" v-if="errorMsg">

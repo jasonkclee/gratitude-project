@@ -1,8 +1,8 @@
 <template>
   <div>
     <nav-bar />
-    <div
-      class="flex-col px-4 md:px-8 mx-auto justify-center"
+    <v-container
+      class="flex-col px-4 md:px-8 mx-auto justify-center white--text"
       style="max-width: 960px;"
     >
       <div class="mb-8 text-left text-gray-100">
@@ -28,13 +28,13 @@
           <a
             href="mailto:ben@gratitudeproject.ca"
             target="_top"
-            class="font-bold underline white--text"
+            class="underline white--text font-weight-bold"
           >
             ben@gratitudeproject.ca
           </a>
         </p>
       </div>
-    </div>
+    </v-container>
   </div>
 </template>
 <script>

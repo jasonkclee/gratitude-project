@@ -76,11 +76,20 @@
           of three CTAs per video.
         </v-card-title>
         <CTAInput
-          v-for="i in [...Array(numCTAs).keys()]"
+          v-for="i in showCTANum()"
           :key="i"
-          v-model="gratitudeMessage.callsToAction[i]"
+          v-model="gratitudeMessage.callsToAction[i - 1]"
         >
         </CTAInput>
+        <v-btn
+          v-show="numCTAs < gratitudeMessage.callsToAction.length"
+          @click="numCTAs++"
+          rounded
+          outlined
+          flat
+          class="secondary darken-2 mx-auto align-center"
+          >Add CTA</v-btn
+        >
       </v-card>
       <div class="w-full text-center md:text-right mb-8">
         <button
@@ -136,81 +145,81 @@ export default {
         this.uploadVideo(this.videoFile);
       }
     },
-    updateBeneficiaryName(beneficiaryName) {
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        beneficiaryName
-      });
-    },
-    updateRecipientName(recipientName) {
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        recipientName
-      });
-    },
-    updateOrganizationName(organizationName) {
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        organizationName
-      });
-    },
-    updatePrimaryContactName(primaryContactName) {
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        primaryContactName
-      });
-    },
-    updateRecipientEmail(recipientEmail) {
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        recipientEmail
-      });
-    },
-    updateVideoUrl(videoUrl) {
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        videoUrl
-      });
-    },
-    updateCtaButtonText(index, buttonText) {
-      let callsToAction = this.gratitudeMessage.callsToAction;
-      callsToAction[index] = {
-        ...this.gratitudeMessage.callsToAction[index],
-        buttonText
-      };
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        callsToAction
-      });
-    },
-    updateCtaLink(index, link) {
-      let callsToAction = this.gratitudeMessage.callsToAction;
-      callsToAction[index] = {
-        ...this.gratitudeMessage.callsToAction[index],
-        link
-      };
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        callsToAction
-      });
-    },
-    updateCtaDescription(index, description) {
-      if (description.length > this.descriptionMaxLength) {
-        description = this.gratitudeMessage.callsToAction[
-          index
-        ].description.substring(0, this.descriptionMaxLength);
-      }
-
-      let callsToAction = this.gratitudeMessage.callsToAction;
-      callsToAction[index] = {
-        ...this.gratitudeMessage.callsToAction[index],
-        description
-      };
-      this.$emit("input", {
-        ...this.gratitudeMessage,
-        callsToAction
-      });
-    },
+    // updateBeneficiaryName(beneficiaryName) {
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     beneficiaryName
+    //   });
+    // },
+    // updateRecipientName(recipientName) {
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     recipientName
+    //   });
+    // },
+    // updateOrganizationName(organizationName) {
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     organizationName
+    //   });
+    // },
+    // updatePrimaryContactName(primaryContactName) {
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     primaryContactName
+    //   });
+    // },
+    // updateRecipientEmail(recipientEmail) {
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     recipientEmail
+    //   });
+    // },
+    // updateVideoUrl(videoUrl) {
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     videoUrl
+    //   });
+    // },
+    // updateCtaButtonText(index, buttonText) {
+    //   let callsToAction = this.gratitudeMessage.callsToAction;
+    //   callsToAction[index] = {
+    //     ...this.gratitudeMessage.callsToAction[index],
+    //     buttonText
+    //   };
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     callsToAction
+    //   });
+    // },
+    // updateCtaLink(index, link) {
+    //   let callsToAction = this.gratitudeMessage.callsToAction;
+    //   callsToAction[index] = {
+    //     ...this.gratitudeMessage.callsToAction[index],
+    //     link
+    //   };
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     callsToAction
+    //   });
+    // },
+    // updateCtaDescription(index, description) {
+    //   if (description.length > this.descriptionMaxLength) {
+    //     description = this.gratitudeMessage.callsToAction[
+    //       index
+    //     ].description.substring(0, this.descriptionMaxLength);
+    //   }
+    //
+    //   let callsToAction = this.gratitudeMessage.callsToAction;
+    //   callsToAction[index] = {
+    //     ...this.gratitudeMessage.callsToAction[index],
+    //     description
+    //   };
+    //   this.$emit("input", {
+    //     ...this.gratitudeMessage,
+    //     callsToAction
+    //   });
+    // },
     uploadVideo(file) {
       let client = new Vimeo(
         "5eae5ebb7bcd5ef29fd7df5c43a05ac66f9c9ce8",

@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="ma-2 pa-5" color="secondary darken-2">
     <v-text-field
       type="text"
       label="Title"

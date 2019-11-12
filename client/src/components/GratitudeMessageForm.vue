@@ -14,7 +14,6 @@
             label="Beneficiary Name"
             outlined
             rounded
-            @input="updateBeneficiaryName($event.target.value)"
           />
           <v-text-field
             type="text"
@@ -23,7 +22,6 @@
             label="Recipient Name"
             outlined
             rounded
-            @input="updateRecipientName($event.target.value)"
           />
           <v-text-field
             type="email"
@@ -32,7 +30,6 @@
             outlined
             rounded
             v-model="gratitudeMessage.recipientEmail"
-            @input="updateRecipientEmail($event.target.value)"
           />
         </v-row>
       </v-card>
@@ -71,79 +68,21 @@
           rounded
           outlined
           v-model="gratitudeMessage.videoUrl"
-          @input="updateVideoUrl($event.target.value)"
         />
       </v-card>
-      <h2 class="text-2xl tracking-wide mb-4">
-        3. Enter and describe the volunteer Call To Action (CTA) button. Maximum
-        of three CTAs per video.
-      </h2>
-      <div
-        class="w-full flex-col mb-8 border-2 border-white px-8 py-4 rounded-lg text-left"
-      >
-        <div
-          class="flex flex-wrap items-end pt-6 pb-4"
-          :class="{
-            'border-gray-300': i !== gratitudeMessage.callsToAction.length - 1,
-            'border-b-2': i !== gratitudeMessage.callsToAction.length - 1
-          }"
-          v-for="(cta, i) in gratitudeMessage.callsToAction"
+      <v-card class="ma-5 pa-5 secondary">
+        <v-card-title>
+          Enter and describe the volunteer Call To Action (CTA) button. Maximum
+          of three CTAs per video.
+        </v-card-title>
+        <CTAInput
+          v-for="i in [...Array(numCTAs).keys()]"
           :key="i"
+          v-model="gratitudeMessage.callsToAction[i]"
         >
-          <div class="w-full md:w-64 pr-0 md:pr-2 py-3">
-            <input
-              type="text"
-              :id="`cta-button-text-${i}`"
-              data-cy="cta-button-text"
-              :aria-label="`Title ${i + 1}`"
-              :placeholder="`Title ${i + 1}`"
-              class="cta-input form-input w-full bg-transparent border-b-2 font-bold text-2xl outline-none pb-2 leading-none"
-              :value="cta.buttonText"
-              @input="updateCtaButtonText(i, $event.target.value)"
-            />
-          </div>
-          <div
-            class="w-full md:w-auto flex-grow pr-0 md:pr-2 py-3 pl-0 md:pl-4"
-          >
-            <input
-              type="text"
-              data-cy="cta-link"
-              aria-label="Link or Email Address"
-              placeholder="Link or Email Address"
-              class="cta-input form-input w-full bg-transparent border-b-2 font-bold outline-none pb-2 leading-none"
-              :value="cta.link"
-              @input="updateCtaLink(i, $event.target.value)"
-            />
-          </div>
-          <div class="w-full flex pt-3">
-            <textarea
-              rows="3"
-              type="text"
-              data-cy="cta-description"
-              aria-label="CTA Description (optional)"
-              placeholder="CTA Description (optional)"
-              class="form-textarea flex-auto bg-transparent font-bold outline-none"
-              :value="cta.description"
-              @input="updateCtaDescription(i, $event.target.value)"
-            />
-            <span
-              class="w-20 text-sm text-right text-gray-300"
-              :class="{
-                'font-bold': cta.description.length > descriptionMaxLength - 15
-              }"
-            >
-              {{ cta.description.length }} / {{ descriptionMaxLength }}
-            </span>
-          </div>
-        </div>
-      </div>
+        </CTAInput>
+      </v-card>
       <div class="w-full text-center md:text-right mb-8">
-        <!-- <button -->
-        <!--   class="w-full md:w-auto mr-0 md:mr-4 mb-4 md:mb-0 bg-gray-100 text-white text-xl py-4 px-16 rounded-full shadow-lg" -->
-        <!--   style="background: rgba(255, 255, 255, 0.1)" -->
-        <!-- > -->
-        <!--   Preview -->
-        <!-- </button> -->
         <button
           data-cy="submit"
           class="w-full md:w-auto bg-gray-100 hover:bg-gray-200 text-blue-800 text-xl py-4 px-16 rounded-full shadow-lg"
@@ -158,16 +97,19 @@
 
 <script>
 import Vimeo from "@/services/vimeo";
+import CTAInput from "./CTAInput";
 
 export default {
   name: "GratitudeMessageForm",
+  components: { CTAInput },
   model: {
-    prop: "gratitude-message"
+    prop: "gratitude-message",
+    event: "change"
   },
   props: {
     gratitudeMessage: {
-      required: true,
-      type: Object
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -175,12 +117,13 @@ export default {
       descriptionMaxLength: 85,
       videoType: "link",
       videoFile: [],
-      isUploading: false,
-      isUploaded: false,
-      errors: []
+      numCTAs: 1
     };
   },
   methods: {
+    showCTANum: function() {
+      return Math.min(this.numCTAs, this.gratitudeMessage.callsToAction.length);
+    },
     uploadOrClear() {
       if (
         !this.videoFile ||

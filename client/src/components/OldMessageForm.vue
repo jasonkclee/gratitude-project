@@ -139,7 +139,8 @@
             class="form-textarea flex-auto bg-transparent font-bold outline-none"
             :value="cta.description"
             @input="updateCtaDescription(i, $event.target.value)"
-          />
+          >
+          </textarea>
           <span
             class="w-20 text-sm text-right text-gray-300"
             :class="{

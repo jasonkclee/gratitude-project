@@ -43,4 +43,3 @@ export default {
     return apiClient.post(`/messages`);
   }
 };
-

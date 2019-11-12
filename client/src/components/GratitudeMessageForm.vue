@@ -36,51 +36,47 @@
           />
         </v-row>
       </v-card>
-
-      <h2 class="text-2xl tracking-wide mb-4">
-        2. Upload a personalised gratitude video.
-      </h2>
-      <div class="mb-8">
-        <span class="flex flex-wrap items-baseline">
-          <span class="w-full md:w-auto flex-grow">
-            <span class="w-full inline-block">
-              <label for="video-link" class="pl-6 mb-2">Video Link</label>
-              <input
-                type="text"
-                id="video-link"
-                data-cy="video-link"
-                class="cta-input form-input w-full border-2 bg-transparent rounded-full py-2 px-5 outline-none font-bold text-lg"
-                :value="gratitudeMessage.videoUrl"
-                @input="updateVideoUrl($event.target.value)"
-                :disabled="isUploaded"
-              />
-            </span>
-          </span>
-          <span
-            class="w-full md:w-auto mx-4 text-lg text-center font-bold md:font-normal my-4 md:my-0"
-            >or</span
-          >
-          <span class="w-full md:w-auto">
-            <!-- <button -->
-            <!--   class="w-full bg-gray-100 hover:bg-gray-200 border-2 border-white text-blue-800 py-3 px-6 rounded-full shadow" -->
-            <!-- > -->
-            <!--   Upload from device -->
-            <!-- </button> -->
-            <input
-              class="w-full bg-gray-100 hover:bg-gray-200 border-2 border-white text-blue-800 py-2 px-6 rounded-full shadow"
-              type="file"
-              id="file"
-              ref="file"
-              aria-label="Upload to Vimeo"
-              v-on:change="uploadVideo()"
-              :disabled="isUploading || isUploaded"
-            />
-          </span>
-        </span>
-      </div>
+      <v-card class="ma-5 pa-5 secondary">
+        <v-card-title>
+          Upload a personalised gratitude video.
+        </v-card-title>
+        <v-radio-group
+          v-model="videoType"
+          :disabled="
+            gratitudeMessage.videoUrl || gratitudeMessage.videoUrl !== ''
+          "
+          row
+        >
+          <v-radio label="Video Link" value="link"></v-radio>
+          <v-radio label="Upload Video" value="file"></v-radio>
+        </v-radio-group>
+        <v-file-input
+          class="mx-auto"
+          v-if="videoType === 'file'"
+          accept="video/*"
+          type="file"
+          id="file"
+          ref="file"
+          label="Upload Video"
+          outlined
+          rounded
+          v-model="videoFile"
+          v-on:change="uploadOrClear"
+        />
+        <v-text-field
+          v-if="videoType === 'link'"
+          type="text"
+          label="Link"
+          class="mx-auto"
+          rounded
+          outlined
+          v-model="gratitudeMessage.videoUrl"
+          @input="updateVideoUrl($event.target.value)"
+        />
+      </v-card>
       <h2 class="text-2xl tracking-wide mb-4">
         3. Enter and describe the volunteer Call To Action (CTA) button. Maximum
-        of three CTA's per video.
+        of three CTAs per video.
       </h2>
       <div
         class="w-full flex-col mb-8 border-2 border-white px-8 py-4 rounded-lg text-left"
@@ -177,12 +173,26 @@ export default {
   data() {
     return {
       descriptionMaxLength: 85,
+      videoType: "link",
+      videoFile: [],
       isUploading: false,
       isUploaded: false,
       errors: []
     };
   },
   methods: {
+    uploadOrClear() {
+      if (
+        !this.videoFile ||
+        (Array.isArray(this.videoFile) && length(this.videoFile) === 0)
+      ) {
+        this.gratitudeMessage.videoUrl = "";
+      } else if (Array.isArray(this.videoFile)) {
+        this.uploadVideo(this.videoFile[0]);
+      } else {
+        this.uploadVideo(this.videoFile);
+      }
+    },
     updateBeneficiaryName(beneficiaryName) {
       this.$emit("input", {
         ...this.gratitudeMessage,
@@ -258,11 +268,7 @@ export default {
         callsToAction
       });
     },
-    uploadVideo() {
-      this.isUploading = true;
-
-      let file_name = this.$refs.file.files[0];
-
+    uploadVideo(file) {
       let client = new Vimeo(
         "5eae5ebb7bcd5ef29fd7df5c43a05ac66f9c9ce8",
         "XY45SWIYxKK6CNuTjfI5eHyybgqgLC47gnDikMHK/l20TI+M17lNQrnJUeK2Zbo+PEFCGILMAOF4gzXvPnVSFtM3VI46k6mFVyAIO2seuk1QfVe3I7Gv2AVQWbUm1dLY",
@@ -270,7 +276,7 @@ export default {
       );
 
       client.upload(
-        file_name,
+        file,
         {
           name: "The Gratitude Project",
           description: "Thank You!"

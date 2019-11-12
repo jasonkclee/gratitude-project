@@ -228,4 +228,8 @@ export default {
 .v-card-title {
   word-break: break-all;
 }
+.v-card__text,
+.v-card__title {
+  word-break: normal !important;
+}
 </style>

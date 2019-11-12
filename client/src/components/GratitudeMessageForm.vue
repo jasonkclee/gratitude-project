@@ -72,9 +72,11 @@
       </v-card>
       <v-card class="ma-5 pa-5 secondary">
         <v-card-title>
-          Enter and describe the volunteer Call To Actions (CTA).
+          Enter any desired volunteer Call to Action(s) (CTAs).
         </v-card-title>
-        <v-card-subtitle> Maximum of three CTAs per video.git</v-card-subtitle>
+        <v-card-subtitle
+          >You may add up to three CTAs per video.</v-card-subtitle
+        >
         <CTAInput
           v-for="i in showCTANum()"
           :key="i"
@@ -93,15 +95,16 @@
           >
         </v-card-actions>
       </v-card>
-      <div class="w-full text-center md:text-right mb-8">
-        <button
-          data-cy="submit"
-          class="w-full md:w-auto bg-gray-100 hover:bg-gray-200 text-blue-800 text-xl py-4 px-16 rounded-full shadow-lg"
-          @click="submit(gratitudeMessage)"
+      <v-row>
+        <v-btn
+          class="v-size--x-large mx-auto my-auto secondary"
+          rounded
+          outlined
+          @click="submit()"
         >
           Submit
-        </button>
-      </div>
+        </v-btn>
+      </v-row>
     </v-form>
   </v-container>
 </template>
@@ -128,7 +131,7 @@ export default {
       descriptionMaxLength: 85,
       videoType: "link",
       videoFile: [],
-      numCTAs: 1
+      numCTAs: 0
     };
   },
   methods: {

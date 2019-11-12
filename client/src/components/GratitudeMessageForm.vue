@@ -1,12 +1,12 @@
 <template>
   <v-container class="mx-auto">
     <v-form ref="createMessageForm" v-model="formValid">
-      <v-stepper class="primary" vertical>
+      <v-stepper class="primary lighten-1" v-model="step" vertical>
+        <v-stepper-step step="1" editable :rules="this.rules.basicInfoRules"
+          >Enter basic beneficiary and recipient information.</v-stepper-step
+        >
         <v-stepper-content step="1">
-          <v-card class="ma-5 pa-5 secondary">
-            <v-card-title>
-              Enter basic beneficiary and recipient information.
-            </v-card-title>
+          <v-card class="pa-5 secondary">
             <v-row>
               <v-text-field
                 type="text"
@@ -40,16 +40,26 @@
               />
             </v-row>
           </v-card>
+          <v-row class="my-2">
+            <v-btn
+              class="v-size--x-large mx-auto my-auto secondary"
+              @click="step = 2"
+              rounded
+              outlined
+              depressed
+              >Next</v-btn
+            >
+          </v-row>
         </v-stepper-content>
+        <v-stepper-step step="2" editable :rules="this.rules.videoRules"
+          >Upload a personalised gratitude video.</v-stepper-step
+        >
         <v-stepper-content step="2">
           <v-card class="ma-5 pa-5 secondary">
-            <v-card-title>
-              Upload a personalised gratitude video.
-            </v-card-title>
             <v-radio-group
               v-model="videoType"
               :disabled="
-                gratitudeMessage.videoUrl || gratitudeMessage.videoUrl !== ''
+                !!gratitudeMessage.videoUrl || gratitudeMessage.videoUrl !== ''
               "
               row
             >
@@ -81,15 +91,23 @@
               v-model="gratitudeMessage.videoUrl"
             />
           </v-card>
+          <v-row class="my-2">
+            <v-btn
+              class="v-size--x-large mx-auto my-auto secondary"
+              @click="step = 3"
+              rounded
+              outlined
+              depressed
+              >Next</v-btn
+            >
+          </v-row>
         </v-stepper-content>
+        <v-stepper-step step="3" editable>
+          Enter up to three volunteer Calls to Action (CTAs).
+          <small>Optional.</small>
+        </v-stepper-step>
         <v-stepper-content step="3">
           <v-card class="ma-5 pa-5 secondary">
-            <v-card-title>
-              Enter any desired volunteer Call to Action(s) (CTAs).
-            </v-card-title>
-            <v-card-subtitle
-              >You may add up to three CTAs per video.</v-card-subtitle
-            >
             <CTAInput
               v-for="i in showCTANum()"
               :key="i"
@@ -150,6 +168,7 @@ export default {
       videoFile: [],
       numCTAs: 0,
       formValid: false,
+      step: 1,
       rules: {
         nameRules: [v => !!v || "Name is required"],
         emailRules: [
@@ -165,6 +184,20 @@ export default {
             /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/.test(
               this.gratitudeMessage.videoUrl
             ) || "URL must be valid."
+        ],
+        basicInfoRules: [
+          () => this.step <= 1 || !!this.gratitudeMessage.beneficiaryName,
+          () => this.step <= 1 || !!this.gratitudeMessage.recipientName,
+          () => this.step <= 1 || !!this.gratitudeMessage.recipientEmail
+        ],
+        videoRules: [
+          () => this.step <= 2 || !!this.gratitudeMessage.videoUrl,
+          () => this.step <= 2 || this.gratitudeMessage.videoUrl.length > 0,
+          () =>
+            this.step <= 2 ||
+            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/.test(
+              this.gratitudeMessage.videoUrl
+            )
         ]
       }
     };

@@ -1,5 +1,8 @@
 <template>
   <v-card class="ma-2 pa-5" color="secondary darken-2">
+    <v-card-title>
+      Call to Action{{ ctaNum ? " " + ctaNum : "" }}
+    </v-card-title>
     <v-text-field
       type="text"
       label="Title"
@@ -21,6 +24,9 @@ export default {
   props: {
     cta: {
       type: Object
+    },
+    ctaNum: {
+      type: Number
     }
   }
 };

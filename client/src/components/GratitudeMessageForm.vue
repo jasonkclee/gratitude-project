@@ -72,24 +72,26 @@
       </v-card>
       <v-card class="ma-5 pa-5 secondary">
         <v-card-title>
-          Enter and describe the volunteer Call To Action (CTA) button. Maximum
-          of three CTAs per video.
+          Enter and describe the volunteer Call To Actions (CTA).
         </v-card-title>
+        <v-card-subtitle> Maximum of three CTAs per video.git</v-card-subtitle>
         <CTAInput
           v-for="i in showCTANum()"
           :key="i"
+          :cta-num="i"
           v-model="gratitudeMessage.callsToAction[i - 1]"
         >
         </CTAInput>
-        <v-btn
-          v-show="numCTAs < gratitudeMessage.callsToAction.length"
-          @click="numCTAs++"
-          rounded
-          outlined
-          flat
-          class="secondary darken-2 mx-auto align-center"
-          >Add CTA</v-btn
-        >
+        <v-card-actions>
+          <v-btn
+            v-show="numCTAs < gratitudeMessage.callsToAction.length"
+            @click="numCTAs++"
+            rounded
+            outlined
+            class="secondary darken-2 mx-auto align-center"
+            >Add CTA</v-btn
+          >
+        </v-card-actions>
       </v-card>
       <div class="w-full text-center md:text-right mb-8">
         <button

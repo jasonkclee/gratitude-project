@@ -1,6 +1,6 @@
 <template>
   <v-container class="mx-auto">
-    <v-form>
+    <v-form ref="createMessageForm" v-model="formValid">
       <v-card class="ma-5 pa-5 secondary">
         <v-card-title>
           Enter basic beneficiary information and video recipient contact
@@ -12,16 +12,20 @@
             class="mx-2"
             v-model="gratitudeMessage.beneficiaryName"
             label="Beneficiary Name"
+            :rules="rules.nameRules"
             outlined
             rounded
+            required
           />
           <v-text-field
             type="text"
             class="mx-2"
             v-model="gratitudeMessage.recipientName"
             label="Recipient Name"
+            :rules="rules.nameRules"
             outlined
             rounded
+            required
           />
           <v-text-field
             type="email"
@@ -30,6 +34,8 @@
             outlined
             rounded
             v-model="gratitudeMessage.recipientEmail"
+            :rules="rules.emailRules"
+            required
           />
         </v-row>
       </v-card>
@@ -59,6 +65,7 @@
           rounded
           v-model="videoFile"
           v-on:change="uploadOrClear"
+          :rules="rules.urlRules"
         />
         <v-text-field
           v-if="videoType === 'link'"
@@ -67,6 +74,7 @@
           class="mx-auto"
           rounded
           outlined
+          :rules="rules.urlRules"
           v-model="gratitudeMessage.videoUrl"
         />
       </v-card>
@@ -98,8 +106,10 @@
       <v-row>
         <v-btn
           class="v-size--x-large mx-auto my-auto secondary"
+          type="submit"
           rounded
           outlined
+          :disabled="!formValid"
           @click="submit()"
         >
           Submit
@@ -131,7 +141,25 @@ export default {
       descriptionMaxLength: 85,
       videoType: "link",
       videoFile: [],
-      numCTAs: 0
+      numCTAs: 0,
+      formValid: false,
+      rules: {
+        nameRules: [v => !!v || "Name is required"],
+        emailRules: [
+          v => !!v || "E-mail is required",
+          v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+        ],
+        urlRules: [
+          v => !!this.gratitudeMessage.videoUrl || "Must submit video.",
+          v =>
+            this.gratitudeMessage.videoUrl.length > 0 || "Must submit video.",
+          // eslint-disable-next-line no-useless-escape
+          v =>
+            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/.test(
+              this.gratitudeMessage.videoUrl
+            ) || "URL must be valid."
+        ]
+      }
     };
   },
   methods: {
@@ -150,81 +178,6 @@ export default {
         this.uploadVideo(this.videoFile);
       }
     },
-    // updateBeneficiaryName(beneficiaryName) {
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     beneficiaryName
-    //   });
-    // },
-    // updateRecipientName(recipientName) {
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     recipientName
-    //   });
-    // },
-    // updateOrganizationName(organizationName) {
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     organizationName
-    //   });
-    // },
-    // updatePrimaryContactName(primaryContactName) {
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     primaryContactName
-    //   });
-    // },
-    // updateRecipientEmail(recipientEmail) {
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     recipientEmail
-    //   });
-    // },
-    // updateVideoUrl(videoUrl) {
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     videoUrl
-    //   });
-    // },
-    // updateCtaButtonText(index, buttonText) {
-    //   let callsToAction = this.gratitudeMessage.callsToAction;
-    //   callsToAction[index] = {
-    //     ...this.gratitudeMessage.callsToAction[index],
-    //     buttonText
-    //   };
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     callsToAction
-    //   });
-    // },
-    // updateCtaLink(index, link) {
-    //   let callsToAction = this.gratitudeMessage.callsToAction;
-    //   callsToAction[index] = {
-    //     ...this.gratitudeMessage.callsToAction[index],
-    //     link
-    //   };
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     callsToAction
-    //   });
-    // },
-    // updateCtaDescription(index, description) {
-    //   if (description.length > this.descriptionMaxLength) {
-    //     description = this.gratitudeMessage.callsToAction[
-    //       index
-    //     ].description.substring(0, this.descriptionMaxLength);
-    //   }
-    //
-    //   let callsToAction = this.gratitudeMessage.callsToAction;
-    //   callsToAction[index] = {
-    //     ...this.gratitudeMessage.callsToAction[index],
-    //     description
-    //   };
-    //   this.$emit("input", {
-    //     ...this.gratitudeMessage,
-    //     callsToAction
-    //   });
-    // },
     uploadVideo(file) {
       let client = new Vimeo(
         "5eae5ebb7bcd5ef29fd7df5c43a05ac66f9c9ce8",
@@ -254,31 +207,12 @@ export default {
       );
     },
     submit(gratitudeMessage) {
-      this.errors = [];
-
-      if (gratitudeMessage.beneficiaryName.length === 0) {
-        this.errors.push("Missing beneficiary name");
-      }
-      if (gratitudeMessage.recipientName.length === 0) {
-        this.errors.push("Missing recipient name");
-      }
-      if (gratitudeMessage.recipientEmail.length === 0) {
-        this.errors.push("Missing recipient email");
-      }
-      if (gratitudeMessage.videoUrl.length === 0) {
-        this.errors.push("Missing video link");
-      }
-
-      if (this.errors.length > 0) {
-        window.scrollTo(0, 0);
-        return;
-      }
-
       gratitudeMessage.callsToAction = gratitudeMessage.callsToAction.filter(
         cta => cta.buttonText.length > 0 && cta.link.length > 0
       );
 
-      this.$emit("submit", this.gratitudeMessage);
+      // disable submit for now
+      // this.$emit("submit", this.gratitudeMessage);
     }
   }
 };

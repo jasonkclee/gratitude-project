@@ -1,120 +1,127 @@
 <template>
   <v-container class="mx-auto">
     <v-form ref="createMessageForm" v-model="formValid">
-      <v-card class="ma-5 pa-5 secondary">
-        <v-card-title>
-          Enter basic beneficiary information and video recipient contact
-          information.
-        </v-card-title>
-        <v-row>
-          <v-text-field
-            type="text"
-            class="mx-2"
-            v-model="gratitudeMessage.beneficiaryName"
-            label="Beneficiary Name"
-            :rules="rules.nameRules"
-            outlined
-            rounded
-            required
-          />
-          <v-text-field
-            type="text"
-            class="mx-2"
-            v-model="gratitudeMessage.recipientName"
-            label="Recipient Name"
-            :rules="rules.nameRules"
-            outlined
-            rounded
-            required
-          />
-          <v-text-field
-            type="email"
-            label="Email"
-            class="mx-2"
-            outlined
-            rounded
-            v-model="gratitudeMessage.recipientEmail"
-            :rules="rules.emailRules"
-            required
-          />
-        </v-row>
-      </v-card>
-      <v-card class="ma-5 pa-5 secondary">
-        <v-card-title>
-          Upload a personalised gratitude video.
-        </v-card-title>
-        <v-radio-group
-          v-model="videoType"
-          :disabled="
-            gratitudeMessage.videoUrl || gratitudeMessage.videoUrl !== ''
-          "
-          row
-        >
-          <v-radio label="Video Link" value="link"></v-radio>
-          <v-radio label="Upload Video" value="file"></v-radio>
-        </v-radio-group>
-        <v-file-input
-          class="mx-auto"
-          v-if="videoType === 'file'"
-          accept="video/*"
-          type="file"
-          id="file"
-          ref="file"
-          label="Upload Video"
-          outlined
-          rounded
-          v-model="videoFile"
-          v-on:change="uploadOrClear"
-          :rules="rules.urlRules"
-        />
-        <v-text-field
-          v-if="videoType === 'link'"
-          type="text"
-          label="Link"
-          class="mx-auto"
-          rounded
-          outlined
-          :rules="rules.urlRules"
-          v-model="gratitudeMessage.videoUrl"
-        />
-      </v-card>
-      <v-card class="ma-5 pa-5 secondary">
-        <v-card-title>
-          Enter any desired volunteer Call to Action(s) (CTAs).
-        </v-card-title>
-        <v-card-subtitle
-          >You may add up to three CTAs per video.</v-card-subtitle
-        >
-        <CTAInput
-          v-for="i in showCTANum()"
-          :key="i"
-          :cta-num="i"
-          v-model="gratitudeMessage.callsToAction[i - 1]"
-        >
-        </CTAInput>
-        <v-card-actions>
-          <v-btn
-            v-show="numCTAs < gratitudeMessage.callsToAction.length"
-            @click="numCTAs++"
-            rounded
-            outlined
-            class="secondary darken-2 mx-auto align-center"
-            >Add CTA</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-      <v-row>
-        <v-btn
-          class="v-size--x-large mx-auto my-auto secondary"
-          type="submit"
-          rounded
-          outlined
-          :disabled="!formValid"
-          @click="submit()"
-        >
-          Submit
-        </v-btn>
-      </v-row>
+      <v-stepper class="primary" vertical>
+        <v-stepper-content step="1">
+          <v-card class="ma-5 pa-5 secondary">
+            <v-card-title>
+              Enter basic beneficiary and recipient information.
+            </v-card-title>
+            <v-row>
+              <v-text-field
+                type="text"
+                class="mx-2"
+                v-model="gratitudeMessage.beneficiaryName"
+                label="Beneficiary Name"
+                :rules="rules.nameRules"
+                outlined
+                rounded
+                required
+              />
+              <v-text-field
+                type="text"
+                class="mx-2"
+                v-model="gratitudeMessage.recipientName"
+                label="Recipient Name"
+                :rules="rules.nameRules"
+                outlined
+                rounded
+                required
+              />
+              <v-text-field
+                type="email"
+                label="Email"
+                class="mx-2"
+                outlined
+                rounded
+                v-model="gratitudeMessage.recipientEmail"
+                :rules="rules.emailRules"
+                required
+              />
+            </v-row>
+          </v-card>
+        </v-stepper-content>
+        <v-stepper-content step="2">
+          <v-card class="ma-5 pa-5 secondary">
+            <v-card-title>
+              Upload a personalised gratitude video.
+            </v-card-title>
+            <v-radio-group
+              v-model="videoType"
+              :disabled="
+                gratitudeMessage.videoUrl || gratitudeMessage.videoUrl !== ''
+              "
+              row
+            >
+              <v-radio label="Video Link" value="link"></v-radio>
+              <v-radio label="Upload Video" value="file"></v-radio>
+            </v-radio-group>
+            <v-file-input
+              class="mx-auto"
+              v-if="videoType === 'file'"
+              accept="video/*"
+              type="file"
+              id="file"
+              ref="file"
+              label="Upload Video"
+              outlined
+              rounded
+              v-model="videoFile"
+              v-on:change="uploadOrClear"
+              :rules="rules.urlRules"
+            />
+            <v-text-field
+              v-if="videoType === 'link'"
+              type="text"
+              label="Link"
+              class="mx-auto"
+              rounded
+              outlined
+              :rules="rules.urlRules"
+              v-model="gratitudeMessage.videoUrl"
+            />
+          </v-card>
+        </v-stepper-content>
+        <v-stepper-content step="3">
+          <v-card class="ma-5 pa-5 secondary">
+            <v-card-title>
+              Enter any desired volunteer Call to Action(s) (CTAs).
+            </v-card-title>
+            <v-card-subtitle
+              >You may add up to three CTAs per video.</v-card-subtitle
+            >
+            <CTAInput
+              v-for="i in showCTANum()"
+              :key="i"
+              :cta-num="i"
+              v-model="gratitudeMessage.callsToAction[i - 1]"
+            >
+            </CTAInput>
+            <v-card-actions>
+              <v-btn
+                v-show="numCTAs < gratitudeMessage.callsToAction.length"
+                @click="numCTAs++"
+                rounded
+                outlined
+                class="secondary darken-2 mx-auto align-center"
+                >Add CTA</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+          <v-row>
+            <v-btn
+              class="v-size--x-large mx-auto my-auto secondary"
+              type="submit"
+              rounded
+              outlined
+              :disabled="!formValid"
+              @click="submit()"
+            >
+              Submit
+            </v-btn>
+          </v-row>
+        </v-stepper-content>
+      </v-stepper>
     </v-form>
   </v-container>
 </template>
@@ -218,10 +225,7 @@ export default {
 };
 </script>
 <style>
-.cta-input {
-  @apply border-blue-200;
-}
-.cta-input:focus {
-  @apply border-white;
+.v-card-title {
+  word-break: break-all;
 }
 </style>

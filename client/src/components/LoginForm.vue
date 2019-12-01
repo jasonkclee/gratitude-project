@@ -1,22 +1,32 @@
 <template>
   <div>
     <form id="login" class="loginForm">
-      <input
-        type="text"
-        name="username"
-        v-model="input.username"
-        v-on:keyup.enter="login"
-        placeholder="Username"
-        class="mt-3 cta-input form-input w-full border-2 bg-transparent rounded-full py-2 px-5 outline-none font-bold text-lg"
-      />
-      <input
-        type="password"
-        name="password"
-        v-model="input.password"
-        v-on:keyup.enter="login"
-        placeholder="Password"
-        class="mt-3 cta-input form-input w-full border-2 bg-transparent rounded-full py-2 px-5 outline-none font-bold text-lg"
-      />
+      <div class="mb-4 flex flex-wrap justify-left">
+        <label for="username" class="pl-6">
+          Username
+        </label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          v-model="input.username"
+          v-on:keyup.enter="login"
+          class="mt-3 cta-input form-input w-full border-solid border-2 rounded-full py-2 px-5 outline-none font-bold text-lg"
+        />
+      </div>
+      <div class="mb-4 flex flex-wrap justify-left">
+        <label for="password" class="pl-6">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          v-model="input.password"
+          v-on:keyup.enter="login"
+          class="mt-3 cta-input form-input w-full v-text-field--rounded border-2 border-solid rounded-full py-2 px-5 outline-none  font-bold text-lg"
+        />
+      </div>
       <button
         type="button"
         v-on:click="login()"
@@ -25,6 +35,7 @@
         Login
       </button>
     </form>
+
     <div class="mt-3 py-2 errorMsg" v-if="errorMsg">{{ errorMsg }}</div>
   </div>
 </template>
@@ -74,7 +85,7 @@ export default {
         }
         //redirects to home page if token is valid
         console.log("user already signed in");
-        this.$router.push("/dashboard");
+        this.$router.push("/search");
       } catch (err) {
         console.log(err);
       }
@@ -99,7 +110,7 @@ export default {
             localStorage.setItem("token", res.data.token);
             this.$store.commit("setNameId", decoded.name, decoded.id);
             console.log("the name in storage is " + this.$store.state.name);
-            self.$router.push("/dashboard");
+            self.$router.push("/search");
           }
         })
         .catch(err => {

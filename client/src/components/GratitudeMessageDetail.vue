@@ -70,7 +70,7 @@ export default {
     onClick(cta, index) {
       this.$gtag("event", "click_message_call_to_action", {
         event_category: "gratitude_message",
-        event_label: `${this.gratitudeMessage.id}`,
+        event_label: `${this.gratitudeMessage._id}`,
         value: index
       });
 
